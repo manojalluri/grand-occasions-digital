@@ -18,7 +18,7 @@ const schema = z.object({
   email: z.string().trim().email("Enter a valid email").max(120).optional().or(z.literal("")),
   eventType: z.enum(EVENT_TYPES),
   eventDate: z.string().min(1, "Choose an event date"),
-  guests: z.coerce.number().int().min(20, "Minimum 20 guests").max(2000, "Up to 2,000 guests"),
+  guests: z.number({ message: "Enter guest count" }).int().min(20, "Minimum 20 guests").max(2000, "Up to 2,000 guests"),
   message: z.string().max(500).optional(),
 });
 type FormValues = z.infer<typeof schema>;
@@ -95,7 +95,7 @@ export function ContactSection() {
                       <input className="form-input" type="date" {...register("eventDate")} />
                     </Field>
                     <Field label="Approximate guests" error={errors.guests?.message} className="md:col-span-2">
-                      <input className="form-input" type="number" min={20} max={2000} {...register("guests")} />
+                      <input className="form-input" type="number" min={20} max={2000} {...register("guests", { valueAsNumber: true })} />
                     </Field>
                     <Field label="Anything we should know? (optional)" error={errors.message?.message} className="md:col-span-2">
                       <textarea className="form-input min-h-[110px]" rows={4} {...register("message")} />
